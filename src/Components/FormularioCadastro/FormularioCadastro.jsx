@@ -1,98 +1,33 @@
+import { Typography } from "@material-ui/core";
 import React, { useState } from "react";
-import {
-  TextField,
-  Button,
-  Switch,
-  FormControlLabel,
-} from "@material-ui/core/";
+import DadosEntrega from "./dadosEntrega";
 
-function FormularioCadastro({aoEnviar, validarCPF}) {
-  const [nome, setName] = useState("");
-  const [sobrenome, setSobrenome] = useState("");
-  const [cpf, setCpf] = useState("");
-  const [promocoes, setPromocoes] = useState(true);
-  const [novidades, setNovidades] = useState(true);
-  const [erros, setErros] = useState({cpf:{valido:true, texto:""}});
+import DadosPessoais from "./DadosPessoais";
+import DadosUsuario from "./DadosUsuario";
 
+function FormularioCadastro({ aoEnviar, validarCPF }) {
+
+  const [etapaAtual, setEtapaAtual] = useState(1)
+
+  function formularioAtual(etapa){
+    switch(etapa){
+      case 0:
+        return <DadosUsuario />
+      case 1:
+        return <DadosPessoais aoEnviar={aoEnviar} validarCPF={validarCPF}/>
+      case 2:
+        return <DadosEntrega/>
+        default:
+          return <Typography>Erro ao selecionar formulário</Typography>
+    }
+  }
   return (
-    <form
-      onSubmit={(event) => {
-        event.preventDefault();
-        aoEnviar({nome, sobrenome, cpf, novidades, promocoes})
-      }}
-    >
-      <TextField
-        value={nome}
-        onChange={(event) => {
-          setName(event.target.value);
-        }}
-        variant="outlined"
-        id="nome"
-        label="Nome"
-        margin="normal"
-        fullWidth
-      />
-      <TextField
-        value={sobrenome}
-        onChange={(event) => {
-          setSobrenome(event.target.value);
-        }}
-        variant="outlined"
-        id="Sobrenome"
-        label="Sobrenome"
-        margin="normal"
-        fullWidth
-      />
-      <TextField
-        value={cpf}
-        onChange={(event) => {
-          setCpf(event.target.value);
-        }}
-        onBlur={(e)=>{
-          const eValido = validarCPF(e.target.value);
-          setErros({cpf:eValido})
-        }}
-        error={!erros.cpf.valido}
-        helperText={erros.cpf.texto}
-        variant="outlined"
-        id="cpf"
-        label="CPF"
-        margin="normal"
-        fullWidth
-      />
-      <FormControlLabel
-        label="Promoções"
-        control={
-          <Switch
-            checked={promocoes}
-            onChange={(event) => {
-              setPromocoes(event.target.checked);
-            }}
-            name="promocoes"
-            defaultChecked={promocoes}
-            color="primary"
-          />
-        }
-      />
-      <FormControlLabel
-        label="Novidades"
-        control={
-          <Switch
-            checked={novidades}
-            onChange={(event) => {
-              setNovidades(event.target.checked);
-            }}
-            name="Novidades"
-            defaultChecked={novidades}
-            color="primary"
-          />
-        }
-      />
-
-      <Button type="submit" variant="contained" color="primary">
-        Cadastrar
-      </Button>
-    </form>
+    <>
+      {formularioAtual(etapaAtual)}
+      {/* <DadosPessoais aoEnviar={aoEnviar} validarCPF={validarCPF}/>
+      <DadosUsuario />
+      <DadosEntrega/> */}
+    </>
   );
 }
 
