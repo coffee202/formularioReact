@@ -1,6 +1,6 @@
 import { TextField, Button} from '@material-ui/core';
 import React from 'react';
-function DadosEntrega(){
+function DadosEntrega({aoEnviar}){
   return(
     <form>
       <TextField
